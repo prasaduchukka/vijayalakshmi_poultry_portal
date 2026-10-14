@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login – Vijayalakshmi Poultry Farm</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="login-wrap">
+    <video
+      id="login-bg-video"
+      class="login-bg-video"
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="auto"
+      aria-hidden="true">
+      <source src="/assets/bg_video.mp4" type="video/mp4">
+    </video>
+    <div class="login-bg-overlay" aria-hidden="true"></div>
+
+    <div class="login-shell">
+      <div class="login-illustration">
+        <div class="illustration-art" id="farm-art"></div>
+        <div class="illustration-copy">
+          <div class="illustration-logo">
+            <img src="assets/vijayalakshmi-poultry-logo.png" alt="Vijayalakshmi Poultry Farm logo">
+          </div>
+          <div class="eyebrow">Vijayalakshmi Poultry Farm</div>
+          <h2>Farm-to-center<br>stock management</h2>
+          <p>Track purchases, trips, deliveries, payments and stock in one place.</p>
+        </div>
+        <div class="feature-strip" id="feature-strip"></div>
+      </div>
+
+      <div class="login-card">
+        <div class="brand-mark">
+          <img class="login-logo-image" src="assets/vijayalakshmi-poultry-logo.png" alt="Vijayalakshmi Poultry Farm logo">
+          <div class="eyebrow">Secure Access</div>
+          <h1>Admin Console</h1>
+          <p>Sign in to manage Vijayalakshmi Poultry Farm</p>
+        </div>
+        <div id="error-box"></div>
+        <form id="login-form">
+          <div class="field">
+            <label for="username">Username</label>
+            <input type="text" id="username" required autocomplete="username" placeholder="Enter username">
+          </div>
+          <div class="field">
+            <label for="password">Password</label>
+            <input type="password" id="password" required autocomplete="current-password" placeholder="Enter password">
+          </div>
+          <button type="submit" class="btn-primary" id="login-btn">Log In</button>
+        </form>
+        <p style="text-align:center;margin:12px 0 0"><a href="forgot_credentials.html">Forgot username or password?</a></p>
+
+        <div class="login-security-note">Session-protected administration · Vijayalakshmi Poultry Farm</div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/format.js"></script>
+  <script src="js/icons.js"></script>
+  <script src="js/illustrations.js"></script>
+  <script src="js/feature-strip.js"></script>
+  <script>
+    document.getElementById('farm-art').innerHTML = Illustrations.farmScene;
+    renderFeatureStrip('feature-strip');
+
+    // If already logged in, skip straight to the dashboard.
+    Api.get('/api/auth/me').then(() => { window.location.href = 'pages/dashboard.html'; }).catch(() => {});
+
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('login-btn');
+      const errorBox = document.getElementById('error-box');
+      errorBox.innerHTML = '';
+      btn.disabled = true;
+      btn.textContent = 'Logging in...';
+      try {
+        await Api.post('/api/auth/login', {
+          username: document.getElementById('username').value.trim(),
+          password: document.getElementById('password').value,
+        });
+        window.location.href = 'pages/dashboard.html';
+      } catch (err) {
+        errorBox.innerHTML = `<div class="alert alert-error">${escapeHtml(err.message)}</div>`;
+        btn.disabled = false;
+        btn.textContent = 'Log In';
+      }
+    });
+
+  </script>
+</body>
+</html>

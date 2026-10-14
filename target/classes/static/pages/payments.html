@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Payments – Vijayalakshmi Poultry Farm</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body data-page="payments" data-title="Payments">
+  <div id="page-content">
+    <div class="card">
+      <div class="toolbar" style="margin-bottom:0;">
+        <div class="section-tabs" id="tabs">
+          <button data-tab="customer" class="active">Customer Payments Received</button>
+          <button data-tab="supplier">Supplier Payments Made</button>
+        </div>
+        <div class="filters">
+          <button class="btn-primary btn-sm" id="add-customer-payment-btn">+ Customer Payment</button>
+          <button class="btn-outline btn-sm" id="add-feed-btn">+ Feed Sale</button>
+          <button class="btn-amber btn-sm" id="add-supplier-payment-btn">+ Supplier Payment</button>
+        </div>
+      </div>
+
+      <div id="tab-customer">
+        <div class="field" style="max-width:280px;">
+          <label>Filter by Customer</label>
+          <select id="customer-filter"><option value="">All Customers</option></select>
+        </div>
+        <table>
+          <thead><tr><th>Date</th><th>Customer</th><th>Method</th><th>Reference</th><th class="text-right">Amount</th></tr></thead>
+          <tbody id="customer-payments-body"><tr><td colspan="5" class="table-empty">Select a customer, or loading...</td></tr></tbody>
+        </table>
+      </div>
+
+      <div id="tab-supplier" style="display:none;">
+        <div class="field" style="max-width:280px;">
+          <label>Filter by Supplier</label>
+          <select id="supplier-filter"><option value="">Select a supplier</option></select>
+        </div>
+        <table>
+          <thead><tr><th>Date</th><th>Supplier</th><th>Method</th><th>Reference</th><th class="text-right">Amount</th></tr></thead>
+          <tbody id="supplier-payments-body"><tr><td colspan="5" class="table-empty">Select a supplier above</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Customer payment modal -->
+  <div class="modal-backdrop" id="customer-payment-modal" style="display:none;">
+    <div class="modal wide">
+      <div class="modal-header">
+        <h2>Record Customer Payment</h2>
+        <button class="modal-close" data-close-modal="customer-payment-modal">&times;</button>
+      </div>
+      <p class="hint" style="margin-bottom:12px;">Use <strong>Save &amp; Next</strong> to enter several customers' payments one after another without closing this window.</p>
+      <div id="cp-session-list"></div>
+      <div id="cp-form-error"></div>
+      <form id="cp-form">
+        <div class="field">
+          <label>Customer *</label>
+          <select id="cp-customer" required></select>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Payment Date *</label>
+            <input type="date" id="cp-date" required>
+          </div>
+          <div class="field">
+            <label>Amount *</label>
+            <input type="number" step="0.01" min="0.01" id="cp-amount" required>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Payment Method *</label>
+            <select id="cp-method" required>
+              <option value="CASH">Cash</option>
+              <option value="UPI">UPI</option>
+              <option value="BANK_TRANSFER">Bank Transfer</option>
+              <option value="CHEQUE">Cheque</option>
+              <option value="OTHER">Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Reference Number</label>
+            <input type="text" id="cp-reference">
+          </div>
+        </div>
+        <div class="field">
+          <label>Notes</label>
+          <textarea id="cp-notes" rows="2"></textarea>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn-outline" data-close-modal="customer-payment-modal">Close</button>
+          <button type="button" class="btn-outline" id="cp-save-next-btn">Save &amp; Next</button>
+          <button type="submit" class="btn-primary" id="cp-save-btn">Save &amp; Finish</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Feed sale modal -->
+  <div class="modal-backdrop" id="feed-modal" style="display:none;">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Record Feed Sale</h2>
+        <button class="modal-close" data-close-modal="feed-modal">&times;</button>
+      </div>
+      <p class="hint" style="margin-bottom:14px;">For when a chicken center also buys chicken feed. Adds to their outstanding balance, same as a delivery.</p>
+      <div id="feed-form-error"></div>
+      <form id="feed-form">
+        <div class="field">
+          <label>Customer *</label>
+          <select id="f-customer" required></select>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Date *</label>
+            <input type="date" id="f-date" required>
+          </div>
+          <div class="field">
+            <label>Amount *</label>
+            <input type="number" step="0.01" min="0.01" id="f-amount" required>
+          </div>
+        </div>
+        <div class="field">
+          <label>Description</label>
+          <input type="text" id="f-description" placeholder="e.g. 2 bags of broiler feed">
+        </div>
+        <div class="field">
+          <label>Notes</label>
+          <textarea id="f-notes" rows="2"></textarea>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn-outline" data-close-modal="feed-modal">Cancel</button>
+          <button type="submit" class="btn-primary" id="feed-save-btn">Save Feed Sale</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Supplier payment modal -->
+  <div class="modal-backdrop" id="supplier-payment-modal" style="display:none;">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Record Supplier Payment</h2>
+        <button class="modal-close" data-close-modal="supplier-payment-modal">&times;</button>
+      </div>
+      <div id="sp-form-error"></div>
+      <form id="sp-form">
+        <div class="field">
+          <label>Supplier *</label>
+          <select id="sp-supplier" required></select>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Payment Date *</label>
+            <input type="date" id="sp-date" required>
+          </div>
+          <div class="field">
+            <label>Amount *</label>
+            <input type="number" step="0.01" min="0.01" id="sp-amount" required>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Payment Method *</label>
+            <select id="sp-method" required>
+              <option value="CASH">Cash</option>
+              <option value="UPI">UPI</option>
+              <option value="BANK_TRANSFER">Bank Transfer</option>
+              <option value="CHEQUE">Cheque</option>
+              <option value="OTHER">Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Reference Number</label>
+            <input type="text" id="sp-reference">
+          </div>
+        </div>
+        <div class="field">
+          <label>Notes</label>
+          <textarea id="sp-notes" rows="2"></textarea>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn-outline" data-close-modal="supplier-payment-modal">Cancel</button>
+          <button type="submit" class="btn-primary" id="sp-save-btn">Save Payment</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="../js/config.js"></script>
+  <script src="../js/api.js"></script>
+  <script src="../js/format.js"></script>
+  <script src="../js/modal.js"></script>
+  <script src="../js/icons.js"></script>
+  <script src="../js/layout.js"></script>
+  <script src="../js/payments.js"></script>
+</body>
+</html>

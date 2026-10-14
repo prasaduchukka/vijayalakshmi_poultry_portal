@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Customer Account – Vijayalakshmi Poultry Farm</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body data-page="customers" data-title="Customer Account">
+  <div id="page-content">
+    <div class="card" id="customer-header-card">
+      <div class="loading-row">Loading customer...</div>
+    </div>
+
+    <div class="grid grid-4" id="customer-stats"></div>
+
+    <div class="card">
+      <div class="toolbar" style="margin-bottom: 0;">
+        <div class="section-tabs" id="tabs">
+          <button data-tab="ledger" class="active">Ledger</button>
+          <button data-tab="deliveries">Delivery History</button>
+          <button data-tab="payments">Payment History</button>
+        </div>
+        <div class="filters">
+          <button class="btn-amber btn-sm" id="record-delivery-btn">+ Record Delivery</button>
+          <button class="btn-amber btn-sm" id="record-feed-btn">+ Record Feed Sale</button>
+          <button class="btn-amber btn-sm" id="record-payment-btn">+ Record Payment</button>
+          <button class="btn-outline btn-sm" id="generate-pdf-btn">🖶️ Generate Statement PDF</button>
+        </div>
+      </div>
+
+      <!-- Ledger tab: paper-ledger format, matches the owner's handwritten book -->
+      <div id="tab-ledger">
+        <table>
+          <thead><tr><th>Date</th><th>Birds</th><th>Kg</th><th>Rate</th><th class="text-right">Amount</th><th class="text-right">O.Bal</th><th class="text-right">T.Bal</th><th class="text-right">Paid</th><th class="text-right">Balance</th><th>Description</th></tr></thead>
+          <tbody id="paper-ledger-body"><tr><td colspan="10" class="table-empty">Loading...</td></tr></tbody>
+        </table>
+      </div>
+
+      <div id="tab-deliveries" style="display:none;">
+        <table>
+          <thead><tr><th>Date</th><th>Birds</th><th>Dispatch Wt</th><th>Rate</th><th class="text-right">Amount</th><th></th></tr></thead>
+          <tbody id="deliveries-body"><tr><td colspan="6" class="table-empty">Loading...</td></tr></tbody>
+        </table>
+      </div>
+
+      <div id="tab-payments" style="display:none;">
+        <table>
+          <thead><tr><th>Date</th><th>Method</th><th>Reference</th><th>Notes</th><th class="text-right">Amount</th><th></th></tr></thead>
+          <tbody id="payments-body"><tr><td colspan="6" class="table-empty">Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Record Delivery Modal -->
+  <div class="modal-backdrop" id="delivery-modal" style="display:none;">
+    <div class="modal wide">
+      <div class="modal-header">
+        <h2 id="delivery-modal-title">Record Delivery</h2>
+        <button class="modal-close" data-close-modal="delivery-modal">&times;</button>
+      </div>
+      <div id="delivery-form-error"></div>
+      <form id="delivery-form">
+        <input type="hidden" id="d-id">
+        <div class="field-row">
+          <div class="field">
+            <label>Delivery Date *</label>
+            <input type="date" id="d-date" required>
+          </div>
+          <div class="field">
+            <label>Number of Birds (optional)</label>
+            <input type="number" min="0" id="d-birds">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Dispatch Weight (kg) *</label>
+            <input type="number" step="0.01" min="0" id="d-dispatch" required>
+          </div>
+          <div class="field">
+            <label>Selling Rate *</label>
+            <input type="number" step="0.01" min="0" id="d-rate" required>
+          </div>
+        </div>
+        <div class="field">
+          <label>Sales Amount (auto = Dispatch Weight × Rate)</label>
+          <input type="text" id="d-sales-amount" disabled>
+        </div>
+        <div class="field">
+          <label>Notes</label>
+          <textarea id="d-notes" rows="2"></textarea>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn-outline" data-close-modal="delivery-modal">Cancel</button>
+          <button type="submit" class="btn-primary" id="delivery-save-btn">Save Delivery</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Record Feed Sale Modal -->
+  <div class="modal-backdrop" id="feed-modal" style="display:none;">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Record Feed Sale</h2>
+        <button class="modal-close" data-close-modal="feed-modal">&times;</button>
+      </div>
+      <p class="hint" style="margin-bottom:14px;">For when this chicken center also buys chicken feed from the farm. Adds to their outstanding balance, same as a delivery.</p>
+      <div id="feed-form-error"></div>
+      <form id="feed-form">
+        <div class="field-row">
+          <div class="field">
+            <label>Date *</label>
+            <input type="date" id="f-date" required>
+          </div>
+          <div class="field">
+            <label>Amount *</label>
+            <input type="number" step="0.01" min="0.01" id="f-amount" required>
+          </div>
+        </div>
+        <div class="field">
+          <label>Description</label>
+          <input type="text" id="f-description" placeholder="e.g. 2 bags of broiler feed">
+        </div>
+        <div class="field">
+          <label>Notes</label>
+          <textarea id="f-notes" rows="2"></textarea>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn-outline" data-close-modal="feed-modal">Cancel</button>
+          <button type="submit" class="btn-primary" id="feed-save-btn">Save Feed Sale</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Record Payment Modal -->
+  <div class="modal-backdrop" id="payment-modal" style="display:none;">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Record Payment</h2>
+        <button class="modal-close" data-close-modal="payment-modal">&times;</button>
+      </div>
+      <div id="payment-form-error"></div>
+      <form id="payment-form">
+        <input type="hidden" id="p-id">
+        <div class="field-row">
+          <div class="field">
+            <label>Payment Date *</label>
+            <input type="date" id="p-date" required>
+          </div>
+          <div class="field">
+            <label>Amount *</label>
+            <input type="number" step="0.01" min="0.01" id="p-amount" required>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Payment Method *</label>
+            <select id="p-method" required>
+              <option value="CASH">Cash</option>
+              <option value="UPI">UPI</option>
+              <option value="BANK_TRANSFER">Bank Transfer</option>
+              <option value="CHEQUE">Cheque</option>
+              <option value="OTHER">Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Reference Number</label>
+            <input type="text" id="p-reference">
+          </div>
+        </div>
+        <div class="field">
+          <label>Notes</label>
+          <textarea id="p-notes" rows="2"></textarea>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn-outline" data-close-modal="payment-modal">Cancel</button>
+          <button type="submit" class="btn-primary" id="payment-save-btn">Save Payment</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- PDF date range modal -->
+  <div class="modal-backdrop" id="pdf-modal" style="display:none;">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Generate Customer Statement</h2>
+        <button class="modal-close" data-close-modal="pdf-modal">&times;</button>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>From Date</label>
+          <input type="date" id="pdf-from">
+        </div>
+        <div class="field">
+          <label>To Date</label>
+          <input type="date" id="pdf-to">
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn-outline" data-close-modal="pdf-modal">Cancel</button>
+        <button type="button" class="btn-primary" id="pdf-generate-btn">Generate PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/config.js"></script>
+  <script src="../js/api.js"></script>
+  <script src="../js/format.js"></script>
+  <script src="../js/modal.js"></script>
+  <script src="../js/icons.js"></script>
+  <script src="../js/layout.js"></script>
+  <script src="../js/customer-detail.js"></script>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Account – Vijayalakshmi Poultry Farm</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body data-page="account" data-title="My Account">
+  <div id="page-content">
+    <div class="grid grid-2">
+      <div class="card">
+        <h2 style="margin-bottom:4px;">Change Username</h2>
+        <p class="hint" style="margin-bottom:14px;">You'll need to log in again with your new username afterward.</p>
+        <div id="username-form-error"></div>
+        <div id="username-form-success"></div>
+        <form id="username-form">
+          <div class="field">
+            <label>New Username</label>
+            <input type="text" id="u-new-username" required autocomplete="username">
+          </div>
+          <div class="field">
+            <label>Current Password</label>
+            <input type="password" id="u-current-password" required autocomplete="current-password">
+          </div>
+          <div class="form-actions" style="justify-content:flex-start; border-top:none; padding-top:6px;">
+            <button type="submit" class="btn-primary" id="username-save-btn">Update Username</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="card">
+        <h2 style="margin-bottom:4px;">Change Password</h2>
+        <p class="hint" style="margin-bottom:14px;">Choose a password only you know.</p>
+        <div id="password-form-error"></div>
+        <div id="password-form-success"></div>
+        <form id="password-form">
+          <div class="field">
+            <label>Current Password</label>
+            <input type="password" id="p-current-password" required autocomplete="current-password">
+          </div>
+          <div class="field">
+            <label>New Password</label>
+            <input type="password" id="p-new-password" required autocomplete="new-password">
+          </div>
+          <div class="form-actions" style="justify-content:flex-start; border-top:none; padding-top:6px;">
+            <button type="submit" class="btn-primary" id="password-save-btn">Update Password</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:18px">
+      <h2 style="margin-bottom:4px;">Forgot-login Recovery Email</h2>
+      <p class="hint" style="margin-bottom:14px;">Set an email inbox you can access. OTPs for forgotten username/password will be sent here. Your current password is required to change this setting.</p>
+      <div id="recovery-email-error"></div><div id="recovery-email-success"></div>
+      <form id="recovery-email-form">
+        <div class="field"><label for="recovery-email-address">Recovery Email</label><input type="email" id="recovery-email-address" required autocomplete="email" placeholder="you@example.com"></div>
+        <div class="field"><label for="recovery-email-current-password">Current Password</label><input type="password" id="recovery-email-current-password" required autocomplete="current-password"></div>
+        <div class="form-actions" style="justify-content:flex-start;border-top:none;padding-top:6px;"><button type="submit" class="btn-primary" id="recovery-email-save-btn">Save Recovery Email</button></div>
+      </form>
+    </div>
+
+    <div class="card" id="farm-settings-card" style="display:none;">
+      <h2 style="margin-bottom:4px;">Farm Details</h2>
+      <p class="hint" style="margin-bottom:14px;">Shown on the app branding and at the top of every generated PDF report. Admin only.</p>
+      <div id="farm-form-error"></div>
+      <div id="farm-form-success"></div>
+      <form id="farm-form">
+        <div class="field">
+          <label>Farm Name</label>
+          <input type="text" id="f-farm-name">
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Owner Name</label>
+            <input type="text" id="f-owner-name">
+          </div>
+          <div class="field">
+            <label>Owner Phone</label>
+            <input type="text" id="f-owner-phone">
+          </div>
+        </div>
+        <div class="form-actions" style="justify-content:flex-start; border-top:none; padding-top:6px;">
+          <button type="submit" class="btn-primary" id="farm-save-btn">Save Farm Details</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="../js/config.js"></script>
+  <script src="../js/api.js"></script>
+  <script src="../js/format.js"></script>
+  <script src="../js/icons.js"></script>
+  <script src="../js/layout.js"></script>
+  <script src="../js/account.js"></script>
+</body>
+</html>
