@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard – Vijayalakshmi Poultry Farm</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body data-page="dashboard" data-title="Dashboard">
+  <div id="page-content">
+    <div class="dash-hero">
+      <div class="dash-hero-copy">
+        <h2 id="dash-greeting">Welcome back</h2>
+        <p id="dash-date"></p>
+        <div class="feature-strip" id="feature-strip"></div>
+      </div>
+      <div class="dash-hero-art" id="farm-art"></div>
+    </div>
+
+    <div class="grid grid-3" id="stat-cards">
+      <div class="loading-row">Loading dashboard...</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title-row"><h2>Recent Deliveries</h2><a href="deliveries.html">View all</a></div>
+      <table>
+        <thead><tr><th>Date</th><th>Customer</th><th class="text-right">Amount</th></tr></thead>
+        <tbody id="recent-deliveries-body"><tr><td colspan="3" class="table-empty">Loading...</td></tr></tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title-row"><h2>Recent Payments</h2><a href="payments.html">View all</a></div>
+      <table>
+        <thead><tr><th>Date</th><th>Customer</th><th>Method</th><th class="text-right">Amount</th></tr></thead>
+        <tbody id="recent-payments-body"><tr><td colspan="4" class="table-empty">Loading...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="../js/config.js"></script>
+  <script src="../js/api.js"></script>
+  <script src="../js/format.js"></script>
+  <script src="../js/icons.js"></script>
+  <script src="../js/illustrations.js"></script>
+  <script src="../js/feature-strip.js"></script>
+  <script src="../js/layout.js"></script>
+  <script src="../js/dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reports – Vijayalakshmi Poultry Farm</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body data-page="reports" data-title="Reports & Profit / Loss">
+  <div id="page-content">
+
+    <div class="card">
+      <div class="card-title-row">
+        <h2>Estimated Profit / Loss</h2>
+        <div class="section-tabs" id="pl-range-tabs" style="border:none; margin:0;">
+          <button data-range="today" class="active">Today</button>
+          <button data-range="week">This Week</button>
+          <button data-range="month">This Month</button>
+          <button data-range="custom">Custom</button>
+        </div>
+      </div>
+      <div class="field-row" id="pl-custom-range" style="display:none; max-width:420px;">
+        <div class="field">
+          <label>From</label>
+          <input type="date" id="pl-from">
+        </div>
+        <div class="field">
+          <label>To</label>
+          <input type="date" id="pl-to">
+        </div>
+        <div class="field" style="align-self:flex-end;">
+          <button class="btn-outline" id="pl-custom-apply">Apply</button>
+        </div>
+      </div>
+      <div id="pl-result" class="loading-row">Loading...</div>
+      <div class="form-actions" style="border-top:none; padding-top:0;">
+        <button class="btn-outline" id="pl-pdf-btn">🖶️ Download Profit/Loss PDF</button>
+      </div>
+    </div>
+
+    <div class="grid grid-2">
+      <div class="card">
+        <h3>Customer Statement PDF</h3>
+        <p class="hint">One customer's ledger, or choose "All Customers" for every customer combined into one PDF (each on their own page).</p>
+        <div class="field">
+          <label>Customer</label>
+          <select id="cs-customer"></select>
+        </div>
+        <div class="field-row">
+          <div class="field"><label>From</label><input type="date" id="cs-from"></div>
+          <div class="field"><label>To</label><input type="date" id="cs-to"></div>
+        </div>
+        <button class="btn-primary" id="cs-generate-btn">Generate PDF</button>
+      </div>
+
+      <div class="card">
+        <h3>Supplier Purchase PDF</h3>
+        <p class="hint">Full purchase + payment history for one supplier.</p>
+        <div class="field">
+          <label>Supplier</label>
+          <select id="sp-supplier"></select>
+        </div>
+        <button class="btn-primary" id="sp-generate-btn" style="margin-top:8px;">Generate PDF</button>
+      </div>
+
+      <div class="card">
+        <h3>Daily Sales PDF</h3>
+        <p class="hint">All deliveries for a single day, across every customer.</p>
+        <div class="field">
+          <label>Date</label>
+          <input type="date" id="ds-date">
+        </div>
+        <button class="btn-primary" id="ds-generate-btn">Generate PDF</button>
+      </div>
+
+      <div class="card">
+        <h3>Expense PDF</h3>
+        <p class="hint">All recorded expenses in a date range.</p>
+        <div class="field-row">
+          <div class="field"><label>From</label><input type="date" id="ex-from"></div>
+          <div class="field"><label>To</label><input type="date" id="ex-to"></div>
+        </div>
+        <button class="btn-primary" id="ex-generate-btn">Generate PDF</button>
+      </div>
+
+      <div class="card">
+        <h3>Vehicle Trip PDF</h3>
+        <p class="hint">Every trip for one vehicle: driver, weight dispatched vs. delivered, and every stop — for tallying against the supplier's dispatch document.</p>
+        <div class="field">
+          <label>Vehicle</label>
+          <select id="vt-vehicle"></select>
+        </div>
+        <div class="field-row">
+          <div class="field"><label>From</label><input type="date" id="vt-from"></div>
+          <div class="field"><label>To</label><input type="date" id="vt-to"></div>
+        </div>
+        <button class="btn-primary" id="vt-generate-btn">Generate PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/config.js"></script>
+  <script src="../js/api.js"></script>
+  <script src="../js/format.js"></script>
+  <script src="../js/icons.js"></script>
+  <script src="../js/layout.js"></script>
+  <script src="../js/reports.js"></script>
+</body>
+</html>

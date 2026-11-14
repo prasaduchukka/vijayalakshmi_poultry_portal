@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Staff Accounts – Vijayalakshmi Poultry Farm</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body data-page="users" data-title="Staff Accounts">
+  <div id="page-content">
+    <div class="card" style="background:var(--green-100); border-color:#cfe3d4;">
+      <p style="margin:0; font-size:13px;">
+        <strong>Admin</strong> can add/edit/delete any record and manage staff accounts.
+        <strong>Gumasta (Staff)</strong> accounts can only enter new deliveries, payments, purchases,
+        expenses, customers, and suppliers — they cannot edit or permanently delete existing records.
+      </p>
+    </div>
+
+    <div class="toolbar">
+      <div></div>
+      <button class="btn-primary" id="add-user-btn">+ Add Staff Account</button>
+    </div>
+
+    <div class="card">
+      <table>
+        <thead><tr><th>Username</th><th>Full Name</th><th>Role</th><th>Created</th><th></th></tr></thead>
+        <tbody id="users-body"><tr><td colspan="5" class="table-empty">Loading...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="user-modal" style="display:none;">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Add Staff Account</h2>
+        <button class="modal-close" data-close-modal="user-modal">&times;</button>
+      </div>
+      <div id="user-form-error"></div>
+      <form id="user-form">
+        <div class="field">
+          <label>Username *</label>
+          <input type="text" id="u-username" required autocomplete="off">
+        </div>
+        <div class="field">
+          <label>Full Name</label>
+          <input type="text" id="u-fullname">
+        </div>
+        <div class="field">
+          <label>Password *</label>
+          <input type="password" id="u-password" required autocomplete="new-password">
+        </div>
+        <div class="field">
+          <label>Role *</label>
+          <select id="u-role" required>
+            <option value="GUMASTA">Gumasta (Staff — entry only)</option>
+            <option value="ADMIN">Admin (full access)</option>
+          </select>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn-outline" data-close-modal="user-modal">Cancel</button>
+          <button type="submit" class="btn-primary" id="user-save-btn">Create Account</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="../js/config.js"></script>
+  <script src="../js/api.js"></script>
+  <script src="../js/format.js"></script>
+  <script src="../js/modal.js"></script>
+  <script src="../js/icons.js"></script>
+  <script src="../js/layout.js"></script>
+  <script src="../js/users.js"></script>
+</body>
+</html>
