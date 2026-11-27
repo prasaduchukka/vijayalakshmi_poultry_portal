@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Customer Login – Vijayalakshmi Poultry Farm</title><link rel="stylesheet" href="css/public.css"></head>
+<body class="portal-auth">
+<header class="mini-nav"><a class="brand" href="/"><img src="assets/vijayalakshmi-poultry-logo.jpeg"> Vijayalakshmi Poultry Farm</a><a href="/">Back to website</a></header>
+<main class="auth-card"><div class="auth-icon">▤</div><p class="eyebrow">CUSTOMER PORTAL</p><h1>View your account</h1><p>Sign in with the username and password provided by Vijayalakshmi Poultry Farm.</p>
+<div id="error-box"></div><form id="login-form"><label>Username<input id="username" required autocomplete="username" placeholder="Customer username"></label>
+<label>Password<input id="password" type="password" required autocomplete="current-password" placeholder="Your password"></label>
+<button class="btn red full" id="login-btn">Customer Login</button></form><p class="small-note">Need login credentials? Please contact the farm administrator.</p></main>
+<script src="js/config.js"></script><script src="js/api.js"></script><script>
+Api.get('/api/auth/me').then(me=>{if(me.role==='CUSTOMER')location.href='customer-portal.html';}).catch(()=>{});
+document.getElementById('login-form').addEventListener('submit',async e=>{e.preventDefault();const b=document.getElementById('login-btn'),box=document.getElementById('error-box');box.innerHTML='';b.disabled=true;b.textContent='Signing in...';
+try{const me=await Api.post('/api/auth/login',{username:document.getElementById('username').value.trim(),password:document.getElementById('password').value});
+if(me.role!=='CUSTOMER'){await Api.post('/api/auth/logout');throw new Error('This is not a customer portal account. Please use Admin Login.');}
+location.href='customer-portal.html';}catch(err){box.textContent=err.message;box.className='error';b.disabled=false;b.textContent='Customer Login';}});
+</script></body></html>

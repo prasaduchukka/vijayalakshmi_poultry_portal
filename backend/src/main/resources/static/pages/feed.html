@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Feed Inventory – Vijayalakshmi Poultry Farm</title><link rel="stylesheet" href="../css/style.css"></head>
+<body data-page="feed" data-title="Feed Inventory & Sales">
+<div id="page-content">
+  <div class="grid grid-3" id="feed-stats">
+    <div class="stat-card"><div class="stat-label">Available Feed Bags</div><div class="stat-value" id="feed-stock">—</div></div>
+    <div class="stat-card amber"><div class="stat-label">Current Price / Bag</div><div class="stat-value" id="feed-price">—</div></div>
+    <div class="stat-card"><div class="stat-label">Total Feed Sales</div><div class="stat-value" id="feed-sales-count">—</div></div>
+  </div>
+  <div class="card">
+    <div class="card-title-row"><div><h2>Purchase / Add Feed Stock</h2><p class="hint">Enter the number of bags received from the godown and set the current selling price per bag.</p></div></div>
+    <form id="feed-restock-form">
+      <div class="field-row">
+        <div class="field"><label>New Bags Received *</label><input type="number" id="restock-bags" min="1" step="1" required placeholder="e.g. 600"></div>
+        <div class="field"><label>Selling Price per Bag (₹) *</label><input type="number" id="restock-price" min="0.01" step="0.01" required placeholder="e.g. 500"></div>
+      </div>
+      <div class="form-actions"><button class="btn-primary" id="restock-save-btn" type="submit">Add Stock & Save Price</button></div>
+      <p class="hint">Adding stock increases the available quantity. The new price will apply to future feed sales; previous sales keep their original recorded price.</p>
+      <div id="restock-error"></div>
+    </form>
+  </div>
+  <div class="card">
+    <div class="toolbar" style="justify-content:flex-start;gap:16px;flex-wrap:wrap"><button class="btn-amber" id="new-feed-sale-btn" type="button">+ Feed Sale</button><div><h2 style="margin:0">Feed Sales History</h2><p class="hint">Every sale reduces stock and adds the calculated amount to the customer's ledger.</p></div></div>
+    <table><thead><tr><th>Date</th><th>Customer</th><th>Bags</th><th>Price / Bag</th><th class="text-right">Total Cost</th><th class="text-right">Amount Paid</th><th class="text-right">Balance Due</th><th>Notes</th><th>Actions</th></tr></thead>
+    <tbody id="feed-sales-body"><tr><td colspan="9" class="table-empty">Loading...</td></tr></tbody></table>
+  </div>
+</div>
+<div class="modal-backdrop" id="feed-new-modal" style="display:none"><div class="modal">
+  <div class="modal-header"><h2>Record Feed Sale</h2><button class="modal-close" data-close-modal="feed-new-modal">&times;</button></div>
+  <div id="feed-new-error"></div>
+  <form id="feed-new-form">
+    <div class="field"><label>Customer *</label><select id="new-feed-customer" required></select></div>
+    <div class="field-row">
+      <div class="field"><label>Sale Date *</label><input type="date" id="new-feed-date" required></div>
+      <div class="field"><label>Number of Bags *</label><input type="number" id="new-feed-bags" min="1" step="1" required></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Total Cost (auto)</label><input id="new-feed-total" readonly></div>
+      <div class="field"><label>Amount Paid now</label><input type="number" id="new-feed-paid" min="0" step="0.01" value="0"></div>
+    </div>
+    <div class="field"><label>Notes</label><textarea id="new-feed-notes" rows="2"></textarea></div>
+    <p class="hint" id="new-feed-hint">Uses the current price per bag. Reduces feed stock and adds the amount (less any amount paid) to the customer's ledger.</p>
+    <div class="form-actions"><button type="button" class="btn-outline" data-close-modal="feed-new-modal">Cancel</button><button type="submit" class="btn-primary" id="feed-new-save">Save Feed Sale</button></div>
+  </form>
+</div></div>
+<div class="modal-backdrop" id="feed-edit-modal" style="display:none"><div class="modal">
+  <div class="modal-header"><h2>Edit Feed Sale</h2><button class="modal-close" data-close-modal="feed-edit-modal">&times;</button></div>
+  <div id="feed-edit-error"></div>
+  <form id="feed-edit-form">
+    <input type="hidden" id="edit-feed-id">
+    <div class="field"><label>Customer *</label><select id="edit-feed-customer" required></select></div>
+    <div class="field-row">
+      <div class="field"><label>Sale Date *</label><input type="date" id="edit-feed-date" required></div>
+      <div class="field"><label>Number of Bags *</label><input type="number" id="edit-feed-bags" min="1" step="1" required></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Total Cost (auto)</label><input id="edit-feed-total" readonly></div>
+      <div class="field"><label>Amount Paid *</label><input type="number" id="edit-feed-paid" min="0" step="0.01" required></div>
+    </div>
+    <div class="field"><label>Notes</label><textarea id="edit-feed-notes" rows="2"></textarea></div>
+    <p class="hint">Amount paid is recorded as a credit against this feed sale in the customer's ledger. It cannot exceed the total cost.</p>
+    <div class="form-actions"><button type="button" class="btn-outline" data-close-modal="feed-edit-modal">Cancel</button><button type="submit" class="btn-primary" id="feed-edit-save">Save Changes</button></div>
+  </form>
+</div></div>
+<script src="../js/config.js"></script><script src="../js/api.js"></script><script src="../js/format.js"></script><script src="../js/modal.js"></script><script src="../js/icons.js"></script><script src="../js/layout.js"></script><script src="../js/feed.js"></script>
+</body></html>

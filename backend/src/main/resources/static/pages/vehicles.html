@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vehicles – Vijayalakshmi Poultry Farm</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body data-page="vehicles" data-title="Vehicles">
+  <div id="page-content">
+    <div class="toolbar">
+      <div></div>
+      <button class="btn-primary" id="add-vehicle-btn">+ Add Vehicle</button>
+    </div>
+
+    <div class="card">
+      <table>
+        <thead>
+          <tr><th>Owner</th><th>Vehicle Number</th><th>Insurance</th><th>Brake</th><th>Permit</th><th>Road Tax</th><th>Pollution PUCC</th><th></th></tr>
+        </thead>
+        <tbody id="vehicles-body"><tr><td colspan="8" class="table-empty">Loading...</td></tr></tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title-row">
+        <h2>Trip History</h2>
+      </div>
+      <div class="field" style="max-width:280px;">
+        <label>Vehicle</label>
+        <select id="trip-vehicle-filter"><option value="">Select a vehicle</option></select>
+      </div>
+      <table>
+        <thead><tr><th>Date</th><th>Company</th><th>Driver</th><th>Distance</th><th>Mileage</th></tr></thead>
+        <tbody id="trips-body"><tr><td colspan="5" class="table-empty">Select a vehicle above</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="vehicle-modal" style="display:none;">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="vehicle-modal-title">Add Vehicle</h2>
+        <button class="modal-close" data-close-modal="vehicle-modal">&times;</button>
+      </div>
+      <div id="vehicle-form-error"></div>
+      <form id="vehicle-form">
+        <input type="hidden" id="v-id">
+        <div class="field-row">
+          <div class="field">
+            <label>Owner</label>
+            <input type="text" id="v-owner">
+          </div>
+          <div class="field">
+            <label>Vehicle Number</label>
+            <input type="text" id="v-number" required placeholder="e.g. AP 35 Y 3132">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Insurance Due</label>
+            <input type="date" id="v-insurance">
+          </div>
+          <div class="field">
+            <label>Brake Due</label>
+            <input type="date" id="v-brake">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Permit Due</label>
+            <input type="date" id="v-permit">
+          </div>
+          <div class="field">
+            <label>Road Tax Due</label>
+            <input type="date" id="v-roadtax">
+          </div>
+        </div>
+        <div class="field">
+          <label>Pollution PUCC Due</label>
+          <input type="date" id="v-pollution">
+        </div>
+        <div class="field">
+          <label>Notes</label>
+          <textarea id="v-notes" rows="2"></textarea>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn-outline" data-close-modal="vehicle-modal">Cancel</button>
+          <button type="submit" class="btn-primary" id="vehicle-save-btn">Save Vehicle</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="../js/config.js"></script>
+  <script src="../js/api.js"></script>
+  <script src="../js/format.js"></script>
+  <script src="../js/modal.js"></script>
+  <script src="../js/icons.js"></script>
+  <script src="../js/layout.js"></script>
+  <script src="../js/vehicles.js"></script>
+</body>
+</html>

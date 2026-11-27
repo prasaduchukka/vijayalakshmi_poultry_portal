@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#176b45">
+  <title>Admin Account Recovery - Vijayalakshmi Poultry Farm</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    :root { color-scheme: light; }
+    html { min-height: 100%; }
+    body.recovery-page {
+      min-height: 100vh; margin: 0; padding: 0;
+      color: #1f2937; background: #f4f7f2;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    .recovery-page *, .recovery-page *::before, .recovery-page *::after { box-sizing: border-box; }
+    .recovery-wrap {
+      min-height: 100vh; width: 100%; display: flex;
+      align-items: center; justify-content: center;
+      padding: 32px 18px;
+      background: radial-gradient(circle at top left, #e2f0df 0, transparent 38%),
+                  linear-gradient(135deg, #f7f7f0, #edf4ee);
+    }
+    .recovery-card {
+      width: 100%; max-width: 500px; margin: auto;
+      background: #fff; border: 1px solid #e1e9df; border-radius: 22px;
+      padding: clamp(22px, 5vw, 38px);
+      box-shadow: 0 18px 50px rgba(24, 67, 43, .12);
+    }
+    .recovery-brand { display: flex; flex-direction: column; align-items: center; text-align: center; margin: 0 0 22px; }
+    .recovery-brand .brand-mark {
+      display: block; width: 78px; height: 78px; max-width: 100%; object-fit: cover;
+      border-radius: 50%; border: 3px solid #e4efe2; box-shadow: 0 4px 12px #173f251a;
+    }
+    .recovery-brand .eyebrow { margin: 13px 0 0; color: #28704b; font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+    .recovery-brand h1 { margin: 8px 0; color: #173f2b; font-size: clamp(25px, 5vw, 31px); line-height: 1.2; text-align: center; }
+    .recovery-brand .subtitle { max-width: 390px; margin: 0; color: #68756b; font-size: 14px; line-height: 1.65; text-align: center; }
+    .recovery-message { margin: 16px 0 18px; font-size: 14px; line-height: 1.5; overflow-wrap: anywhere; }
+    .recovery-message:empty { display: none; }
+    .recovery-message.success { padding: 12px 14px; color: #176b45; background: #eaf7ed; border-radius: 10px; }
+    .recovery-message.error { padding: 12px 14px; color: #a12d20; background: #fff0ed; border-radius: 10px; }
+    .recovery-form { display: block; width: 100%; margin: 0; }
+    .recovery-field { display: block; width: 100%; margin: 16px 0; }
+    .recovery-field label { display: block; margin: 0 0 8px; color: #334155; font-size: 14px; font-weight: 600; line-height: 1.4; }
+    .recovery-field input {
+      display: block; width: 100%; min-width: 0; height: 48px; margin: 0; padding: 12px 14px;
+      border: 1px solid #cbd5cd; border-radius: 10px; background: #fff; color: #1f2937;
+      font: inherit; font-size: 15px; line-height: 1.4; box-shadow: none;
+    }
+    .recovery-field input:focus { outline: none; border-color: #258252; box-shadow: 0 0 0 3px #25825220; }
+    .recovery-primary {
+      display: block; width: 100%; min-height: 48px; margin: 10px 0 0; padding: 13px 16px;
+      border: 0; border-radius: 10px; background: #176b45; color: #fff;
+      font: inherit; font-size: 15px; font-weight: 700; line-height: 1.4; text-align: center;
+      cursor: pointer; transition: background .15s ease;
+    }
+    .recovery-primary:hover { background: #125536; }
+    .recovery-primary:focus-visible { outline: 3px solid #80c69c; outline-offset: 2px; }
+    .recovery-primary:disabled { opacity: .65; cursor: wait; }
+    .recovery-note { margin: 12px 0 0; color: #68756b; font-size: 12px; line-height: 1.6; }
+    .recovery-step { margin-top: 22px; padding-top: 8px; border-top: 1px solid #e8eee6; }
+    .recovery-step[hidden], .recovery-form[hidden] { display: none !important; }
+    .recovery-footer { margin: 24px 0 0; text-align: center; font-size: 14px; line-height: 1.5; }
+    .recovery-footer a { color: #176b45; font-weight: 600; text-decoration: none; }
+    .recovery-footer a:hover { text-decoration: underline; }
+    @media (max-width: 480px) {
+      .recovery-wrap { align-items: flex-start; padding: 18px 12px; }
+      .recovery-card { border-radius: 16px; padding: 24px 18px; }
+      .recovery-brand { margin-bottom: 18px; }
+      .recovery-brand .brand-mark { width: 68px; height: 68px; }
+      .recovery-field { margin: 14px 0; }
+    }
+  </style>
+</head>
+<body class="recovery-page">
+  <main class="recovery-wrap">
+    <section class="recovery-card" aria-labelledby="recovery-title">
+      <header class="recovery-brand">
+        <img class="brand-mark" src="/assets/vijayalakshmi-poultry-logo.jpeg" alt="Vijayalakshmi Poultry Farm logo">
+        <div class="eyebrow">Secure administrator access</div>
+        <h1 id="recovery-title">Account Recovery</h1>
+        <p class="subtitle">Use the recovery email you saved in your Admin Account settings. We'll send a one-time code so you can update your username and password.</p>
+      </header>
+
+      <div id="message" class="recovery-message" role="status" aria-live="polite"></div>
+
+      <form id="requestForm" class="recovery-form">
+        <div class="recovery-field">
+          <label for="email">Registered recovery email</label>
+          <input id="email" name="email" type="email" required maxlength="254" autocomplete="email" placeholder="Enter your saved recovery email">
+        </div>
+        <button class="recovery-primary" id="sendButton" type="submit">Send verification code</button>
+        <p class="recovery-note">You must first save your recovery email while logged in: Account → Forgot-login Recovery Email.</p>
+      </form>
+
+      <form id="resetForm" class="recovery-form recovery-step" hidden>
+        <div class="recovery-field">
+          <label for="otp">6-digit verification code</label>
+          <input id="otp" name="otp" type="text" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" required autocomplete="one-time-code" placeholder="000000">
+        </div>
+        <div class="recovery-field">
+          <label for="newUsername">New username</label>
+          <input id="newUsername" name="newUsername" type="text" minlength="3" maxlength="60" required autocomplete="username" placeholder="Choose a username">
+        </div>
+        <div class="recovery-field">
+          <label for="newPassword">New password</label>
+          <input id="newPassword" name="newPassword" type="password" minlength="8" maxlength="72" required autocomplete="new-password" placeholder="At least 8 characters">
+        </div>
+        <button class="recovery-primary" id="resetButton" type="submit">Update username and password</button>
+        <p class="recovery-note">The code expires in 5 minutes. If it expires, request a new one. After recovery, log in with your new credentials.</p>
+      </form>
+
+      <footer class="recovery-footer"><a href="/index.html">← Back to login</a></footer>
+    </section>
+  </main>
+  <script>
+    const message = document.getElementById('message');
+    const requestForm = document.getElementById('requestForm');
+    const resetForm = document.getElementById('resetForm');
+
+    function showMessage(text, kind = 'error') {
+      message.textContent = text;
+      message.className = 'recovery-message ' + kind;
+    }
+
+    async function post(path, data) {
+      const response = await fetch(path, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(data)
+      });
+      const result = await response.json().catch(() => ({ message: 'Request failed. Please try again.' }));
+      if (!response.ok) throw new Error(result.message || 'Request failed.');
+      return result;
+    }
+
+    requestForm.addEventListener('submit', async event => {
+      event.preventDefault();
+      const button = document.getElementById('sendButton');
+      button.disabled = true;
+      button.textContent = 'Sending code…';
+      try {
+        const result = await post('/api/auth/admin-recovery/request-otp', {
+          email: document.getElementById('email').value.trim()
+        });
+        resetForm.hidden = false;
+        showMessage(result.message || 'If this email is registered for administrator recovery, an OTP will be sent.', 'success');
+      } catch (error) {
+        showMessage(error.message || 'Unable to send the code. Please try again.');
+      } finally {
+        button.disabled = false;
+        button.textContent = 'Send verification code';
+      }
+    });
+
+    resetForm.addEventListener('submit', async event => {
+      event.preventDefault();
+      const button = document.getElementById('resetButton');
+      button.disabled = true;
+      button.textContent = 'Updating credentials…';
+      try {
+        const result = await post('/api/auth/admin-recovery/reset', {
+          email: document.getElementById('email').value.trim(),
+          otp: document.getElementById('otp').value.trim(),
+          newUsername: document.getElementById('newUsername').value.trim(),
+          newPassword: document.getElementById('newPassword').value
+        });
+        showMessage(result.message || 'Credentials updated. Please log in again.', 'success');
+        requestForm.hidden = true;
+        resetForm.hidden = true;
+      } catch (error) {
+        showMessage(error.message || 'Unable to update credentials. Please try again.');
+      } finally {
+        button.disabled = false;
+        button.textContent = 'Update username and password';
+      }
+    });
+  </script>
+</body>
+</html>

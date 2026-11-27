@@ -1,0 +1,40 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>My Ledger – Vijayalakshmi Poultry Farm</title><link rel="stylesheet" href="css/public.css"><style>
+.customer-ledger-scroll{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+#ledger-table{min-width:1050px;width:100%;border-collapse:collapse}
+#ledger-table th{white-space:nowrap;background:linear-gradient(110deg,#153d2a,#24465c);color:#fff;padding:13px 14px;text-align:left;font-size:12px}
+#ledger-table td{white-space:nowrap;padding:13px 14px;border-bottom:1px solid #e7ddca;font-size:13px}
+#ledger-table .ledger-paid{color:#176b3b;font-weight:600}
+</style></head>
+<body class="portal-auth"><header class="mini-nav"><a class="brand" href="/"><img src="assets/vijayalakshmi-poultry-logo.jpeg"> Vijayalakshmi Poultry Farm</a><button class="logout" id="logout-btn">Log out</button></header>
+<main class="portal-wrap"><div class="portal-head"><div><p class="eyebrow">CUSTOMER ACCOUNT</p><h1 id="customer-name">Your Ledger</h1><p id="customer-subtitle">Your account summary and transaction history</p></div></div>
+<div class="portal-summary"><div class="summary-card"><small>Current Outstanding</small><strong id="outstanding">—</strong></div><div class="summary-card"><small>Total Deliveries</small><strong id="deliveries">—</strong></div><div class="summary-card"><small>Total Paid</small><strong id="paid">—</strong></div></div>
+<section class="ledger-card"><h2>Ledger Statement</h2><p style="color:#777;font-size:13px">Showing the last 10 days of your account. Balances are your true running balance, carried forward from earlier days.</p><div id="ledger-state">Loading your ledger…</div><div class="customer-ledger-scroll"><table id="ledger-table" hidden><thead><tr><th>Date</th><th>Birds</th><th>KG</th><th>Rate</th><th>Amount</th><th>O.Bal</th><th>T.Bal</th><th>Paid</th><th>Balance</th><th>Description</th></tr></thead><tbody id="ledger-body"></tbody></table></div></section></main>
+<script src="js/config.js"></script><script src="js/api.js"></script><script>
+const money=v=>'₹'+Number(v||0).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2});
+const safe=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+async function load(){try{const me=await Api.get('/api/auth/me');if(me.role!=='CUSTOMER'){location.href='admin-login.html';return;}
+const data=await Api.get('/api/customer-portal/me'),a=data.account,c=data.customer;
+document.getElementById('customer-name').textContent=c.chickenCenterName;
+document.getElementById('customer-subtitle').textContent='Welcome'+(c.ownerContactPerson?' '+c.ownerContactPerson:'')+' · '+(c.phoneNumber||'Customer account');
+document.getElementById('outstanding').textContent=money(a.currentOutstandingBalance);
+document.getElementById('deliveries').textContent=Number(a.totalDeliveries||0).toLocaleString('en-IN');
+document.getElementById('paid').textContent=money(a.totalPaid);
+const rows=await Api.get('/api/customer-portal/ledger');const body=document.getElementById('ledger-body');
+if(!rows||!rows.length){document.getElementById('ledger-state').textContent='No ledger entries in the last 10 days.';return;}
+body.innerHTML=rows.map(r=>`<tr>
+<td>${r.entryDate ? new Date(r.entryDate+'T00:00:00').toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'}) : '-'}</td>
+<td>${r.birds==null?'-':Number(r.birds).toLocaleString('en-IN')}</td>
+<td>${safe(r.kgOrItem||'-')==='Feed'?'Feed':(r.kgOrItem&&r.kgOrItem!=='-'?Number(r.kgOrItem).toFixed(2)+' kg':'-')}</td>
+<td>${r.rate==null?'-':money(r.rate)}</td>
+<td>${Number(r.debit||0)>0?money(r.amount):'-'}</td>
+<td>${money(r.openingBalance)}</td>
+<td>${money(r.totalBalance)}</td>
+<td class="ledger-paid">${Number(r.paid||0)>0?money(r.paid):'-'}</td>
+<td><strong>${money(r.balance)}</strong></td>
+<td>${safe(r.description||r.referenceType||'Transaction')}</td>
+</tr>`).join('');
+document.getElementById('ledger-state').hidden=true;document.getElementById('ledger-table').hidden=false;
+}catch(e){if(String(e.message||'').includes('401')||String(e.message||'').toLowerCase().includes('session')){location.href='customer-login.html';return;}document.getElementById('ledger-state').textContent=e.message||'Unable to load your account.';}}
+document.getElementById('logout-btn').onclick=async()=>{try{await Api.post('/api/auth/logout')}finally{location.href='customer-login.html'}};
+load();
+</script></body></html>
